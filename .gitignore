@@ -1,0 +1,14 @@
+# Ignorar arquivos de dados dinâmicos
+inscricoes.csv
+alunos.csv
+
+# Ignorar arquivos temporários do sistema
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar configurações do editor
+.vscode/
+.idea/
+*.swp
