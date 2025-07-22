@@ -79,5 +79,7 @@ def excluir():
                 writer.writerow(linha)
     return redirect(url_for('admin'))
 
+# Teste de integridade de inscrições – 2ª prova
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
