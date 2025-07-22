@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscrição em Aula</title>
+</head>
+<body>
+    <h2>Inscrever-se numa aula</h2>
+    <form method="post">
+        Nome: <input type="text" name="nome" required><br>
+        Data: <input type="date" name="data" required><br>
+        Horário:
+        <select name="horario">
+            {% for h in horarios %}
+                <option value="{{ h[0] }} - {{ h[1] }}">{{ h[0] }} - {{ h[1] }}</option>
+            {% endfor %}
+        </select><br>
+        <button type="submit">Confirmar Inscrição</button>
+    </form>
+</body>
+</html>

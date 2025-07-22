@@ -1,0 +1,31 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+.container {
+    margin-top: 50px;
+}
+.logo {
+    max-width: 200px;
+    margin-bottom: 20px;
+}
+a {
+    display: block;
+    margin: 10px;
+    color: #0055aa;
+    font-size: 18px;
+    text-decoration: none;
+}
+form {
+    margin: 20px auto;
+    width: 300px;
+    text-align: left;
+}
+input, select, button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}

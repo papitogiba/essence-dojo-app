@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Administração</title>
+</head>
+<body>
+    <h2>Alunos Registrados</h2>
+    <ul>
+        {% for aluno in alunos %}
+            <li>{{ aluno[0] }} - {{ aluno[1] }} - {{ aluno[2] }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Inscrições</h2>
+    <ul>
+        {% for i in inscricoes %}
+            <li>{{ i[0] }} - {{ i[1] }} - {{ i[2] }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Remover aluno</h2>
+    <form method="post" action="{{ url_for('excluir') }}">
+        Email do aluno: <input type="email" name="email" required><br>
+        <button type="submit">Remover</button>
+    </form>
+</body>
+</html>
