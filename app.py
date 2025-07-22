@@ -51,7 +51,7 @@ def inscricao():
         with open(INSCRICOES_FILE, mode='a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             writer.writerow([nome, data, horario])
-        return redirect(url_for('home'))
+        return render_template('confirmacao.html', nome=nome, data=data, horario=horario)
     return render_template('inscricao.html', horarios=HORARIOS)
 
 @app.route('/admin', methods=['GET', 'POST'])

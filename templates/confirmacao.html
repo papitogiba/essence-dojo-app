@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscrição Confirmada</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Obrigado, {{ nome }}!</h2>
+        <p>A tua inscrição para o treino de <strong>{{ data }}</strong> às <strong>{{ horario }}</strong> foi recebida com sucesso.</p>
+        <a href="{{ url_for('home') }}">Voltar à página principal</a>
+    </div>
+</body>
+</html>
