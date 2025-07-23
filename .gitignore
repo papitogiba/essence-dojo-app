@@ -1,6 +1,8 @@
 # Ignorar arquivos de dados dinâmicos
 inscricoes.csv
 alunos.csv
+credentials.json
+
 
 # Ignorar arquivos temporários do sistema
 __pycache__/
