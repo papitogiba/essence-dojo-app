@@ -10,10 +10,12 @@
     <form method="post">
         Nome:
 <select name="nome" required>
+  <option value="" disabled selected>-- Escolha o seu nome --</option>
   {% for nome in nomes %}
     <option value="{{ nome }}">{{ nome }}</option>
   {% endfor %}
 </select><br>
+
         Data: <input type="date" name="data" required><br>
         Horário:
         <select name="horario">
