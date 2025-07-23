@@ -1,28 +1,33 @@
 from flask import Flask, render_template, request, redirect, url_for
 import csv
 import os
-from datetime import datetime
+import tempfile
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime  # ¡Esto también es necesario!
 
-app = Flask(__name__)
+app = Flask(__name__)  # 💥 Esto faltaba
 
-# Caminho do arquivo CSV
+# Caminhos dos arquivos locais (ainda usados no painel admin)
 ALUNOS_FILE = 'alunos.csv'
 INSCRICOES_FILE = 'inscricoes.csv'
 
 # Conexão com Google Sheets
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
+
+with tempfile.NamedTemporaryFile(delete=False, mode='w', suffix=".json") as tmp:
+    tmp.write(os.environ['GOOGLE_CREDENTIALS_JSON'])
+    tmp_path = tmp.name
+
+creds = ServiceAccountCredentials.from_json_keyfile_name(tmp_path, scope)
 client = gspread.authorize(creds)
 
-# Abre a planilha e as abas (usa exatamente os nomes das abas e do ficheiro no Google Sheets)
+# Abre a planilha e as abas (usa exatamente os nomes no Google Sheets)
 spreadsheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1utcHu8XSYnCuAJcBJnwY9OqjRAdGPI5GHIEKPmSP4E0/edit")
 sheet_inscricoes = spreadsheet.worksheet("Inscricoes")
 sheet_alunos = spreadsheet.worksheet("Alunos")
 
-
-# Certifique-se que os arquivos existem
+# Certifique-se que os arquivos locais ainda existam
 if not os.path.exists(ALUNOS_FILE):
     with open(ALUNOS_FILE, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
@@ -50,7 +55,6 @@ def registo():
         email = request.form['email']
         faixa = request.form['faixa']
         sheet_alunos.append_row([nome, email, faixa])
-
         return redirect(url_for('home'))
     return render_template('registo.html')
 
@@ -90,8 +94,6 @@ def inscricao():
     nomes = [row[0] for row in sheet_alunos.get_all_values()[1:]]  # ignora cabeçalho
     return render_template('inscricao.html', horarios=HORARIOS, nomes=nomes)
 
-
-
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if request.method == 'POST':
@@ -107,7 +109,7 @@ def admin():
 @app.route('/excluir', methods=['POST'])
 def excluir():
     email = request.form['email']
-    # Atualiza lista de alunos
+    # Atualiza lista de alunos local
     with open(ALUNOS_FILE, encoding='utf-8') as f:
         alunos = list(csv.reader(f))
     with open(ALUNOS_FILE, mode='w', newline='', encoding='utf-8') as f:
@@ -117,7 +119,6 @@ def excluir():
                 writer.writerow(linha)
     return redirect(url_for('admin'))
 
-# Teste de integridade de inscrições – 2ª prova
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
+
