@@ -60,39 +60,44 @@ def registo():
 
 @app.route('/inscricao', methods=['GET', 'POST'])
 def inscricao():
-    if request.method == 'POST':
-        nome = request.form['nome']
-        data = request.form['data']
-        horario = request.form['horario']
+    try:
+        if request.method == 'POST':
+            nome = request.form['nome']
+            data = request.form['data']
+            horario = request.form['horario']
 
-        # Bloquear domingos
-        data_obj = datetime.strptime(data, "%Y-%m-%d")
-        dia_semana = data_obj.weekday()  # 0=lunes, 6=domingo
-        if dia_semana == 6:
-            return "Não há treinos aos domingos. Por favor, escolha outro dia."
+            # Bloquear domingos
+            data_obj = datetime.strptime(data, "%Y-%m-%d")
+            dia_semana = data_obj.weekday()  # 0=lunes, 6=domingo
+            if dia_semana == 6:
+                return "Não há treinos aos domingos. Por favor, escolha outro dia."
 
-        # Validar horários disponíveis por dia
-        horarios_validos = []
-        if dia_semana in range(0, 5):  # Segunda a Sexta
-            horarios_validos = [
-                "09:00 - 10:30 - Todos os níveis",
-                "18:00 - 19:00 - Fundamentos",
-                "19:00 - 20:30 - Avançados"
-            ]
-        elif dia_semana == 5:  # Sábado
-            horarios_validos = [
-                "09:00 - 10:30 - Todos os níveis"
-            ]
+            # Validar horários disponíveis por dia
+            horarios_validos = []
+            if dia_semana in range(0, 5):  # Segunda a Sexta
+                horarios_validos = [
+                    "09:00 - 10:30 - Todos os níveis",
+                    "18:00 - 19:00 - Fundamentos",
+                    "19:00 - 20:30 - Avançados"
+                ]
+            elif dia_semana == 5:  # Sábado
+                horarios_validos = [
+                    "09:00 - 10:30 - Todos os níveis"
+                ]
 
-        horario_str = f"{horario}"
-        if horario_str not in horarios_validos:
-            return "Este horário não está disponível para o dia escolhido. Por favor, selecione um horário válido."
+            horario_str = f"{horario}"
+            if horario_str not in horarios_validos:
+                return "Este horário não está disponível para o dia escolhido. Por favor, selecione um horário válido."
 
-        sheet_inscricoes.append_row([nome, data, horario])
-        return render_template('confirmacao.html', nome=nome, data=data, horario=horario)
+            sheet_inscricoes.append_row([nome, data, horario])
+            return render_template('confirmacao.html', nome=nome, data=data, horario=horario)
 
-    nomes = [row[0] for row in sheet_alunos.get_all_values()[1:]]  # ignora cabeçalho
-    return render_template('inscricao.html', horarios=HORARIOS, nomes=nomes)
+        nomes = [row[0] for row in sheet_alunos.get_all_values()[1:]]  # ignora cabeçalho
+        return render_template('inscricao.html', horarios=HORARIOS, nomes=nomes)
+
+    except Exception as e:
+        return f"Ocorreu um erro: {e}"
+
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
